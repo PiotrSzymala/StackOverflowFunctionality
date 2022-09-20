@@ -6,12 +6,21 @@ using System.Threading.Tasks;
 
 namespace StackOverflowFunctionality.Entities
 {
-    public class Question
+    public class Question : Date
     {
         public int Id { get; set; }
         public string Header { get; set; }
         public string Content { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime? UpdatedDate { get; set; }
+      
+        public List<Comment> Comments { get; set; } = new List<Comment>();
+       
+        public User User { get; set; }
+        public Guid QuestionAuthorId { get; set; }
+
+        public List<Answer> Answers { get; set; }
+
+        public Rating Rating { get; set; }
+
+
     }
 }
