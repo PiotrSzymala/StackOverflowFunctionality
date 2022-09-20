@@ -49,27 +49,6 @@ namespace StackOverflowFunctionality.Entities
                 eb.HasOne(c => c.Question)
                     .WithMany(q => q.Comments)
                     .HasForeignKey(c => c.QuestionCommentId);
-
-                eb.HasMany(c => c.Tags)
-                    .WithMany(t => t.Comments)
-                    .UsingEntity<CommentTag>(
-                        c => c
-                            .HasOne(ct => ct.Tag)
-                            .WithMany()
-                            .HasForeignKey(ct => ct.TagId),
-
-                            c => c
-                            .HasOne(ct => ct.Comment)
-                            .WithMany()
-                            .HasForeignKey(ct => ct.CommentId),
-
-                        ct =>
-                        {
-                            ct.HasKey(x => new { x.TagId, x.CommentId });
-                            ct.Property(x => x.PublicationDate).HasDefaultValueSql("getutcdate()");
-                        }
-
-                        );
             });
 
             modelBuilder.Entity<Question>(eb =>
@@ -88,6 +67,29 @@ namespace StackOverflowFunctionality.Entities
                     .WithOne(r => r.Question)
                     .HasForeignKey<Rating>(q => q.QuestionRatingId)
                     .OnDelete(DeleteBehavior.NoAction);
+
+
+                eb.HasMany(q => q.Tags)
+                    .WithMany(t => t.Questions)
+                    .UsingEntity<QuestionTag>(
+                        q => q
+                            .HasOne(qt => qt.Tag)
+                            .WithMany()
+                            .HasForeignKey(ct => ct.TagId),
+
+                        c => c
+                            .HasOne(ct => ct.Question)
+                            .WithMany()
+                            .HasForeignKey(qt => qt.QuestionId),
+
+                        qt =>
+                        {
+                            qt.HasKey(x => new { x.TagId, x.QuestionId });
+                            qt.Property(x => x.PublicationDate).HasDefaultValueSql("getutcdate()");
+                        }
+
+                    );
+
 
             });
 

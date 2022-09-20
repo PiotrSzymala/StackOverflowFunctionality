@@ -13,7 +13,5 @@ namespace StackOverflowFunctionality.Entities
 
         public Question Question { get; set; }
         public int QuestionCommentId { get; set; }
-
-        public List<Tag> Tags { get; set; }
     }
 }

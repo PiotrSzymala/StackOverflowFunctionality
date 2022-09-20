@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace StackOverflowFunctionality.Entities
 {
-    public class CommentTag
+    public class QuestionTag
     {
-        public Comment Comment { get; set; }
-        public int CommentId { get; set; }
+        public Question Question { get; set; }
+        public int QuestionId { get; set; }
 
         public Tag Tag { get; set; }
         public int TagId { get; set; }

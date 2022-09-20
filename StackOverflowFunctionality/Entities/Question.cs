@@ -21,6 +21,6 @@ namespace StackOverflowFunctionality.Entities
 
         public Rating Rating { get; set; }
 
-
+        public List<Tag> Tags { get; set; }
     }
 }
