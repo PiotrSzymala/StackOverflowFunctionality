@@ -21,21 +21,15 @@ namespace StackOverflowFunctionality.Entities
         public DbSet<Tag> Tags { get; set; }
         public DbSet<User> Users { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Date>(eb =>
-            {
-                eb.Property(d => d.CreatedDate).HasDefaultValueSql("getutcdate()");
-                eb.Property(d => d.UpdatedDate).ValueGeneratedOnUpdate();
-            });
+
 
             modelBuilder.Entity<Answer>(eb =>
             {
-                eb.Property(a => a.Reply).IsRequired();
-
-                eb.HasOne(a => a.User)
-                    .WithMany(u => u.Answers)
-                    .HasForeignKey(a => a.AnswerAuthorId);
+                eb.Property(d => d.CreatedDate).HasDefaultValueSql("getutcdate()");
+                eb.Property(d => d.UpdatedDate).ValueGeneratedOnUpdate();
 
                 eb.HasOne(a => a.Question)
                     .WithMany(q => q.Answers)
@@ -48,7 +42,9 @@ namespace StackOverflowFunctionality.Entities
 
             modelBuilder.Entity<Comment>(eb =>
             {
-                eb.Property(c => c.Message).IsRequired();
+                eb.Property(d => d.CreatedDate).HasDefaultValueSql("getutcdate()");
+                eb.Property(d => d.UpdatedDate).ValueGeneratedOnUpdate();
+
 
                 eb.HasOne(c => c.Question)
                     .WithMany(q => q.Comments)
@@ -79,10 +75,10 @@ namespace StackOverflowFunctionality.Entities
             modelBuilder.Entity<Question>(eb =>
             {
                 eb.Property(q => q.Header)
-                    .IsRequired()
                     .HasMaxLength(200);
 
-                eb.Property(a => a.Content).IsRequired();
+                eb.Property(d => d.CreatedDate).HasDefaultValueSql("getutcdate()");
+                eb.Property(d => d.UpdatedDate).ValueGeneratedOnUpdate();
 
                 eb.HasOne(q => q.User)
                     .WithMany(u => u.Questions)
@@ -90,25 +86,32 @@ namespace StackOverflowFunctionality.Entities
 
                 eb.HasOne(q => q.Rating)
                     .WithOne(r => r.Question)
-                    .HasForeignKey<Rating>(q => q.QuestionRatingId);
+                    .HasForeignKey<Rating>(q => q.QuestionRatingId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
             });
 
             modelBuilder.Entity<Rating>(eb =>
             {
                 eb.Property(r => r.Points)
-                    .IsRequired()
                     .HasDefaultValue(0);
             });
 
             modelBuilder.Entity<Tag>(eb =>
             {
-                eb.Property(t => t.Value).IsRequired();
+                eb.HasData(new Tag() { Id = 1, Value = "C#" },
+                    new Tag() { Id = 2, Value = "SQL" },
+                    new Tag() { Id = 3, Value = "Python" },
+                    new Tag() { Id = 4, Value = "Java" }
+                );
             });
 
             modelBuilder.Entity<User>(eb =>
             {
-                eb.Property(u => u.Nickname).IsRequired();
-                eb.Property(u => u.Email).IsRequired();
+                eb.HasMany(u => u.Answers)
+                    .WithOne(a => a.User)
+                    .HasForeignKey(a => a.AnswerAuthorId)
+                    .OnDelete(DeleteBehavior.NoAction);
             });
         }
     }
