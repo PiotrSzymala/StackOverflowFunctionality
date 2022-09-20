@@ -30,4 +30,5 @@ if (pendingMigrations.Any())
     dbContext.Database.Migrate();
 }
 
+DataGenerator.Seed(dbContext);
 app.Run();
