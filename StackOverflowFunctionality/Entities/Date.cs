@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace StackOverflowFunctionality.Entities
 {
-    public class Tag
+    public abstract class Date
     {
-        public int Id { get; set; }
-        public string Value { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
     }
 }
