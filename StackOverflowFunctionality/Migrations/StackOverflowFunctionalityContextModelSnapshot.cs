@@ -59,7 +59,7 @@ namespace StackOverflowFunctionality.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answers");
+                    b.ToTable("Answers", (string)null);
                 });
 
             modelBuilder.Entity("StackOverflowFunctionality.Entities.Comment", b =>
@@ -94,7 +94,7 @@ namespace StackOverflowFunctionality.Migrations
 
                     b.HasIndex("QuestionCommentId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("StackOverflowFunctionality.Entities.Question", b =>
@@ -133,7 +133,7 @@ namespace StackOverflowFunctionality.Migrations
 
                     b.HasIndex("QuestionAuthorId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("StackOverflowFunctionality.Entities.QuestionTag", b =>
@@ -153,7 +153,7 @@ namespace StackOverflowFunctionality.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("QuestionTag");
+                    b.ToTable("QuestionTag", (string)null);
                 });
 
             modelBuilder.Entity("StackOverflowFunctionality.Entities.Tag", b =>
@@ -169,7 +169,7 @@ namespace StackOverflowFunctionality.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
 
                     b.HasData(
                         new
@@ -208,7 +208,7 @@ namespace StackOverflowFunctionality.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("StackOverflowFunctionality.Entities.Answer", b =>

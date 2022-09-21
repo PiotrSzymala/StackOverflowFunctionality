@@ -32,6 +32,14 @@ if (pendingMigrations.Any())
 
 app.MapGet("data", async (StackOverflowFunctionalityContext db) =>
 {
+    var usersGroupedByAnswers = await db.Answers
+        .Include(a => a.User)
+        .Where(a => a.AnswerAuthorId == a.User.Id)
+        .GroupBy(a=>a.User.Nickname)
+        .Select(a =>new{AuthorsNicknames = a.Key, NumsOfAnswers = a.Count()})
+        .ToListAsync();
+    
+    return usersGroupedByAnswers;
 });
 
 app.MapPost("update", async (StackOverflowFunctionalityContext db) =>
@@ -45,14 +53,27 @@ app.MapPost("update", async (StackOverflowFunctionalityContext db) =>
 
 app.MapPost("create", async (StackOverflowFunctionalityContext db) =>
 {
-    
+    var user = new User()
+    {
+        Nickname = "DeJong213",
+        Email = "mail.test@fakedomain.com"
+    };
+    var question = new Question()
+    {
+        Header = "How to reset id counting to 0?",
+        Content = "When I remove all rows from table, counting starts from the last deleted id.",
+        User = user
+    };
+
+    db.Questions.Add(question);
+    await db.SaveChangesAsync();
 });
 
 // The solution for like and dislike mechanism is strongly simplified, since I haven't learned asp yet.
 // In the final project I would also add a bool property to the User class to check if he already voted
 // (currently the user is able of liking and disliking question, answer or comment many times).
 // It doesn't make sense at this moment because without proper environment I can't check which user is voting.  
-app.MapPost("Like", async (StackOverflowFunctionalityContext db) =>
+app.MapPost("like", async (StackOverflowFunctionalityContext db) =>
 {
     // user input
     var questionChoiceById = 1;
@@ -64,7 +85,7 @@ app.MapPost("Like", async (StackOverflowFunctionalityContext db) =>
 
     await db.SaveChangesAsync();
 });
-app.MapPost("Dislike", async (StackOverflowFunctionalityContext db) =>
+app.MapPost("dislike", async (StackOverflowFunctionalityContext db) =>
 {
     // user input
     var questionChoiceById = 1;
