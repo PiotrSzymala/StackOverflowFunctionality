@@ -48,6 +48,35 @@ app.MapPost("create", async (StackOverflowFunctionalityContext db) =>
     
 });
 
+// The solution for like and dislike mechanism is strongly simplified, since I haven't learned asp yet.
+// In the final project I would also add a bool property to the User class to check if he already voted
+// (currently the user is able of liking and disliking question, answer or comment many times).
+// It doesn't make sense at this moment because without proper environment I can't check which user is voting.  
+app.MapPost("Like", async (StackOverflowFunctionalityContext db) =>
+{
+    // user input
+    var questionChoiceById = 1;
+    //
+
+    Question question = await db.Questions.FirstAsync(q => q.Id == questionChoiceById);
+
+    question.Points++;
+
+    await db.SaveChangesAsync();
+});
+app.MapPost("Dislike", async (StackOverflowFunctionalityContext db) =>
+{
+    // user input
+    var questionChoiceById = 1;
+    //
+
+    Question question = await db.Questions.FirstAsync(q => q.Id == questionChoiceById);
+
+    question.Points--;
+
+    await db.SaveChangesAsync();
+});
+
 app.MapDelete("delete", async (StackOverflowFunctionalityContext db) =>
 {
     var user = await db.Users.FirstAsync(u => u.Nickname == "Adelbert23");
