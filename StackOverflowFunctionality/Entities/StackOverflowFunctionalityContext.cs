@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace StackOverflowFunctionality.Entities
 {
@@ -23,82 +18,7 @@ namespace StackOverflowFunctionality.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Answer>(eb =>
-            {
-                eb.Property(d => d.CreatedDate).HasDefaultValueSql("getutcdate()");
-                eb.Property(d => d.UpdatedDate).ValueGeneratedOnUpdate();
-                eb.Property(d => d.Points).HasDefaultValue(0);
-
-                eb.HasOne(a => a.Question)
-                    .WithMany(q => q.Answers)
-                    .HasForeignKey(a => a.QuestionId);
-                
-            });
-
-            modelBuilder.Entity<Comment>(eb =>
-            {
-                eb.Property(d => d.CreatedDate).HasDefaultValueSql("getutcdate()");
-                eb.Property(d => d.UpdatedDate).ValueGeneratedOnUpdate();
-                eb.Property(d => d.Points).HasDefaultValue(0);
-
-                eb.HasOne(c => c.Question)
-                    .WithMany(q => q.Comments)
-                    .HasForeignKey(c => c.QuestionCommentId);
-            });
-
-            modelBuilder.Entity<Question>(eb =>
-            {
-                eb.Property(q => q.Header)
-                    .HasMaxLength(200);
-
-                eb.Property(d => d.CreatedDate).HasDefaultValueSql("getutcdate()");
-                eb.Property(d => d.UpdatedDate).ValueGeneratedOnUpdate();
-                eb.Property(d => d.Points).HasDefaultValue(0);
-
-                eb.HasOne(q => q.User)
-                    .WithMany(u => u.Questions)
-                    .HasForeignKey(q => q.QuestionAuthorId);
-
-                eb.HasMany(q => q.Tags)
-                    .WithMany(t => t.Questions)
-                    .UsingEntity<QuestionTag>(
-                        q => q
-                            .HasOne(qt => qt.Tag)
-                            .WithMany()
-                            .HasForeignKey(ct => ct.TagId),
-
-                        c => c
-                            .HasOne(ct => ct.Question)
-                            .WithMany()
-                            .HasForeignKey(qt => qt.QuestionId),
-
-                        qt =>
-                        {
-                            qt.HasKey(x => new { x.TagId, x.QuestionId });
-                            qt.Property(x => x.PublicationDate).HasDefaultValueSql("getutcdate()");
-                        }
-
-                    );
-
-
-            });
-
-            modelBuilder.Entity<Tag>(eb =>
-            {
-                eb.HasData(new Tag() { Id = 1, Value = "C#" },
-                    new Tag() { Id = 2, Value = "SQL" },
-                    new Tag() { Id = 3, Value = "Python" },
-                    new Tag() { Id = 4, Value = "Java" }
-                );
-            });
-
-            modelBuilder.Entity<User>(eb =>
-            {
-                eb.HasMany(u => u.Answers)
-                    .WithOne(a => a.User)
-                    .HasForeignKey(a => a.AnswerAuthorId)
-                    .OnDelete(DeleteBehavior.NoAction);
-            });
+            modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
     }
 }
