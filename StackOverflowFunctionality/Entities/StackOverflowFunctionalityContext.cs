@@ -17,34 +17,29 @@ namespace StackOverflowFunctionality.Entities
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Question> Questions { get; set; }
-        public DbSet<Rating> Ratings { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<User> Users { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-
             modelBuilder.Entity<Answer>(eb =>
             {
                 eb.Property(d => d.CreatedDate).HasDefaultValueSql("getutcdate()");
                 eb.Property(d => d.UpdatedDate).ValueGeneratedOnUpdate();
+                eb.Property(d => d.Points).HasDefaultValue(0);
 
                 eb.HasOne(a => a.Question)
                     .WithMany(q => q.Answers)
                     .HasForeignKey(a => a.QuestionId);
-
-                eb.HasOne(a => a.Rating)
-                    .WithOne(r => r.Answer)
-                    .HasForeignKey<Rating>(a => a.AnswerRatingId);
+                
             });
 
             modelBuilder.Entity<Comment>(eb =>
             {
                 eb.Property(d => d.CreatedDate).HasDefaultValueSql("getutcdate()");
                 eb.Property(d => d.UpdatedDate).ValueGeneratedOnUpdate();
-
+                eb.Property(d => d.Points).HasDefaultValue(0);
 
                 eb.HasOne(c => c.Question)
                     .WithMany(q => q.Comments)
@@ -58,16 +53,11 @@ namespace StackOverflowFunctionality.Entities
 
                 eb.Property(d => d.CreatedDate).HasDefaultValueSql("getutcdate()");
                 eb.Property(d => d.UpdatedDate).ValueGeneratedOnUpdate();
+                eb.Property(d => d.Points).HasDefaultValue(0);
 
                 eb.HasOne(q => q.User)
                     .WithMany(u => u.Questions)
                     .HasForeignKey(q => q.QuestionAuthorId);
-
-                eb.HasOne(q => q.Rating)
-                    .WithOne(r => r.Question)
-                    .HasForeignKey<Rating>(q => q.QuestionRatingId)
-                    .OnDelete(DeleteBehavior.NoAction);
-
 
                 eb.HasMany(q => q.Tags)
                     .WithMany(t => t.Questions)
@@ -91,12 +81,6 @@ namespace StackOverflowFunctionality.Entities
                     );
 
 
-            });
-
-            modelBuilder.Entity<Rating>(eb =>
-            {
-                eb.Property(r => r.Points)
-                    .HasDefaultValue(0);
             });
 
             modelBuilder.Entity<Tag>(eb =>

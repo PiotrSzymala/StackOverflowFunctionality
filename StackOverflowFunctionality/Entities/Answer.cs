@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StackOverflowFunctionality.Entities
 {
-    public class Answer : Date
+    public class Answer : DateAndPoints
     {
         public int Id { get; set; }
         public string Reply { get; set; }
@@ -16,7 +16,5 @@ namespace StackOverflowFunctionality.Entities
 
         public Question Question { get; set; }
         public int QuestionId { get; set; }
-
-        public Rating Rating { get; set; }
     }
 }

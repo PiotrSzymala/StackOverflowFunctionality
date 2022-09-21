@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StackOverflowFunctionality.Entities
 {
-    public class Comment : Date
+    public class Comment : DateAndPoints
     {
         public int Id { get; set; }
         public string Message { get; set; }

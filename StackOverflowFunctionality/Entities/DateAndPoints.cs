@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace StackOverflowFunctionality.Entities
 {
-    public abstract class Date
+    public abstract class DateAndPoints
     {
-        public int Id { get; set; }
+        public int Points { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
     }

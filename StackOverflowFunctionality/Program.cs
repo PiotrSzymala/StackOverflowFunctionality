@@ -30,5 +30,33 @@ if (pendingMigrations.Any())
     dbContext.Database.Migrate();
 }
 
-DataGenerator.Seed(dbContext);
+app.MapGet("data", async (StackOverflowFunctionalityContext db) =>
+{
+});
+
+app.MapPost("update", async (StackOverflowFunctionalityContext db) =>
+{
+    User user = await db.Users.FirstAsync(u => u.Nickname == "Justine76");
+
+   user.Answers.Add(new Answer(){QuestionId = 1, Reply = "You should be aware of constraints in mssql and maybe think about new db provider."});
+
+    await db.SaveChangesAsync();
+});
+
+app.MapPost("create", async (StackOverflowFunctionalityContext db) =>
+{
+    
+});
+
+app.MapDelete("delete", async (StackOverflowFunctionalityContext db) =>
+{
+    var user = await db.Users.FirstAsync(u => u.Nickname == "Adelbert23");
+
+    var userQuestions = db.Questions.Where(q => q.QuestionAuthorId == user.Id).ToList();
+    db.RemoveRange(userQuestions);
+
+    await db.SaveChangesAsync();
+});
+
+//DataGenerator.Seed(dbContext);
 app.Run();
