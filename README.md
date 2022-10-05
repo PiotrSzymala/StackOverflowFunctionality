@@ -10,5 +10,3 @@ Project was created with:
 * Entity Framework Core
 * Bogus
 * Git
-## Project status
-* 1.0 version developed.
